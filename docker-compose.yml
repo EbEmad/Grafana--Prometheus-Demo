@@ -13,6 +13,11 @@ services:
       - "5432:5432"
     networks:
       - monitoring
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U user -d db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
   fastapi:
     build: ./fastapi
     container_name: fastapi
@@ -62,7 +67,21 @@ services:
       - postgres
       - prometheus
       - fastapi
-
+  postgresql-exporter:
+    image: prometheuscommunity/postgres-exporter
+    container_name: postgresql-exporter
+    ports:
+        - "9187:9187"
+    environment:
+        DATA_SOURCE_NAME: "postgres://user:root@postgres:5432/db?sslmode=disable"
+    depends_on:
+      prometheus:
+        condition: service_started
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+        - monitoring
 
 volumes:
   postgres_data:
