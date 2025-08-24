@@ -1,0 +1,11 @@
+apiVersion: 1
+providers:
+  - name: 'default'                  # Provider name (any label you like)
+    orgId: 1                         # Organization ID (1 = default org in Grafana)
+    folder: ''                       # Put dashboards in the root folder (empty string)
+    type: file                       # This provider loads dashboards from JSON files
+    disableDeletion: false           # Dashboards can be deleted from UI
+    updateIntervalSeconds: 10        # Check every 10s for changes in this folder
+    allowUiUpdates: true             # Changes made in Grafana UI are persisted to disk
+    options:
+      path: /etc/grafana/provisioning/dashboards
