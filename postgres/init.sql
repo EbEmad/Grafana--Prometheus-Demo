@@ -1,3 +1,4 @@
+-- Active: 1756297082151@@127.0.0.1@5432@db
 -- Create sample tables for learning Grafana
 CREATE TABLE if NOT exists users (
     id SERIAL PRIMARY KEY,
@@ -63,3 +64,22 @@ FROM users u
 LEFT JOIN orders o ON u.id = o.user_id
 LEFT JOIN page_views pv ON u.id = pv.user_id
 GROUP BY u.id, u.username;
+
+
+
+CREATE TABLE web_metrics (
+    id SERIAL PRIMARY KEY,
+    timestamp TIMESTAMP NOT NULL,
+    user_id INT,
+    page VARCHAR(100),
+    session_duration INT,  -- seconds
+    sales_amount NUMERIC(10,2)
+);
+
+INSERT INTO web_metrics (timestamp, user_id, page, session_duration, sales_amount)
+VALUES
+('2025-08-25 10:00:00', 1, '/home', 120, 100),
+('2025-08-25 10:05:00', 2, '/products', 300, 49.99),
+('2025-08-25 10:10:00', 3, '/home', 60, 0),
+('2025-08-25 10:15:00', 2, '/checkout', 200, 99.50),
+('2025-08-25 10:20:00', 4, '/products', 150, 0);
